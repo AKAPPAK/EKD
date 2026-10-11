@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elektroniczna Karta Drogowa v2</title>
+    <title>Elektroniczna Karta Drogowa v3</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col">
 
     <header class="bg-blue-600 text-white shadow-md p-4">
         <div class="max-w-md mx-auto flex justify-between items-center">
-            <h1 class="text-base font-bold">🚛 Karta Drogowa <span class="text-[10px] bg-blue-800 px-1.5 py-0.5 rounded">v2</span></h1>
+            <h1 class="text-base font-bold">🚛 Karta Drogowa <span class="text-[10px] bg-blue-800 px-1.5 py-0.5 rounded">v3</span></h1>
             <span id="userBadge" class="text-xs bg-blue-700 px-2.5 py-1 rounded-full hidden">Niezałogowany</span>
         </div>
     </header>
@@ -65,7 +65,7 @@
             </div>
         </div>
 
-        <!-- MODALE (Start, Koniec, Tankowanie, Statusy) -->
+        <!-- MODALE -->
         <div id="startModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
             <div class="bg-white w-full max-w-md rounded-2xl p-5 space-y-3 max-h-[90vh] overflow-y-auto">
                 <h3 class="font-bold text-base text-slate-800">🟢 Rozpocznij Nową Trasę</h3>
@@ -188,7 +188,8 @@
     </main>
 
     <script>
-        const API_URL = "https://script.google.com/macros/s/TWOJ_URL_TUTAJ/exec"; // Wklej swój URL wdrożenia
+        // Prawidłowy adres API wklejony bezpośrednio
+        const API_URL = "https://script.google.com/macros/s/AKfycbz1kpteVHTLGkaZrsV9APe285v9SPoKFUf7MqnQdOMl8WilYsOQqsDNB7-2/exec";
         let currentUser = null;
 
         window.onload = function() {
