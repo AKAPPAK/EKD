@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>System Transportowy - Karta Drogowa</title>
+    <title>Elektroniczna Karta Drogowa</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col">
@@ -11,20 +11,10 @@
     <!-- Nagłówek -->
     <header class="bg-blue-600 text-white shadow-md p-4">
         <div class="max-w-md mx-auto flex justify-between items-center">
-            <h1 class="text-lg font-bold">🚛 Karta Drogowa</h1>
+            <h1 class="text-base font-bold">🚛 Karta Drogowa</h1>
             <span id="userBadge" class="text-xs bg-blue-700 px-2.5 py-1 rounded-full hidden">Niezałogowany</span>
         </div>
     </header>
-
-    <!-- Konfiguracja URL API (Widoczna tylko dopóki nie zostanie ustawiona) -->
-    <div id="configModal" class="max-w-md mx-auto w-full p-4 mt-2">
-        <div class="bg-amber-50 border border-amber-200 p-4 rounded-xl shadow-sm">
-            <h3 class="font-semibold text-amber-800 text-sm mb-1">Konfiguracja Połączenia</h3>
-            <p class="text-xs text-amber-600 mb-2">Wklej adres URL wdrożonej aplikacji internetowej Google Apps Script:</p>
-            <input type="text" id="scriptUrl" placeholder="https://script.google.com/macros/s/.../exec" class="w-full text-xs p-2 border rounded mb-2">
-            <button onclick="saveUrl()" class="w-full bg-amber-600 text-white text-xs py-2 rounded font-medium hover:bg-amber-700">Zapisz Adres API</button>
-        </div>
-    </div>
 
     <main class="max-w-md mx-auto w-full p-4 flex-1 flex flex-col">
 
@@ -33,12 +23,12 @@
             <h2 class="text-base font-bold text-slate-700">Wybierz kierowcę</h2>
             <div>
                 <label class="block text-xs font-medium text-slate-500 mb-1">Imię i nazwisko</label>
-                <select id="driverSelect" onchange="checkIfPinNeeded()" class="w-full p-2.5 border rounded-lg text-sm bg-slate-50">
+                <select id="driverSelect" class="w-full p-2.5 border rounded-lg text-sm bg-slate-50">
                     <option value="">-- Ładowanie listy... --</option>
                 </select>
             </div>
-            <div id="pinContainer" class="hidden">
-                <label class="block text-xs font-medium text-slate-500 mb-1">Kod PIN (hasło)</label>
+            <div>
+                <label class="block text-xs font-medium text-slate-500 mb-1">Kod PIN</label>
                 <input type="password" id="pinInput" placeholder="Wpisz swój PIN" class="w-full p-2.5 border rounded-lg text-sm">
             </div>
             <button onclick="login()" class="w-full bg-blue-600 text-white py-2.5 rounded-lg text-sm font-semibold hover:bg-blue-700 transition">Zaloguj się</button>
@@ -62,7 +52,7 @@
             </div>
 
             <!-- Przyciski akcji głównej -->
-            <div id="actionContainer" class="grid grid-cols-2 gap-3">
+            <div class="grid grid-cols-2 gap-3">
                 <button id="startRouteBtn" onclick="openStartModal()" class="bg-emerald-600 text-white p-4 rounded-xl shadow-sm font-semibold text-sm flex flex-col items-center justify-center gap-1 hover:bg-emerald-700 transition hidden">
                     🟢 Rozpocznij Trasę
                 </button>
@@ -70,10 +60,10 @@
                     🔴 Zakończ Trasę
                 </button>
                 <button onclick="openFuelModal()" class="bg-amber-500 text-white p-4 rounded-xl shadow-sm font-semibold text-sm flex flex-col items-center justify-center gap-1 hover:bg-amber-600 transition col-span-2">
-                    ⛽ Zgłoś Tankowanie / Dostawę Paliwa
+                    ⛽ Zgłoś Tankowanie
                 </button>
                 <button onclick="loadStatusView()" class="bg-slate-700 text-white p-4 rounded-xl shadow-sm font-semibold text-sm flex flex-col items-center justify-center gap-1 hover:bg-slate-800 transition col-span-2">
-                    🚛 Status Wszystkich Pojazdów
+                    🚛 Status Pojazdów
                 </button>
             </div>
         </div>
@@ -91,11 +81,11 @@
                         </select>
                     </div>
                     <div>
-                        <label class="font-medium text-slate-500">Skąd (Miejsce wyjazdu)</label>
+                        <label class="font-medium text-slate-500">Skąd</label>
                         <input type="text" id="startFrom" class="w-full p-2 border rounded mt-1" placeholder="np. Mława">
                     </div>
                     <div>
-                        <label class="font-medium text-slate-500">Dokąd (Cel)</label>
+                        <label class="font-medium text-slate-500">Dokąd</label>
                         <input type="text" id="startTo" class="w-full p-2 border rounded mt-1" placeholder="np. Wrocław">
                     </div>
                     <div>
@@ -124,8 +114,8 @@
                         <input type="number" id="endOdometer" class="w-full p-2 border rounded mt-1">
                     </div>
                     <div>
-                        <label class="font-medium text-slate-500">Podjazdy / Uwagi</label>
-                        <input type="text" id="endRides" class="w-full p-2 border rounded mt-1" placeholder="Dodatkowe punkty">
+                        <label class="font-medium text-slate-500">Podjazdy</label>
+                        <input type="text" id="endRides" class="w-full p-2 border rounded mt-1">
                     </div>
                     <div class="grid grid-cols-2 gap-2">
                         <div>
@@ -147,7 +137,7 @@
                             <input type="number" step="0.01" id="endRefunds" class="w-full p-2 border rounded mt-1" value="0">
                         </div>
                         <div>
-                            <label class="font-medium text-slate-500">Godziny prac dodatkowych</label>
+                            <label class="font-medium text-slate-500">Godziny prac</label>
                             <input type="number" step="0.5" id="endExtraHours" class="w-full p-2 border rounded mt-1" value="0">
                         </div>
                     </div>
@@ -162,7 +152,7 @@
         <!-- MODAL: Tankowanie -->
         <div id="fuelModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
             <div class="bg-white w-full max-w-md rounded-2xl p-5 space-y-3">
-                <h3 class="font-bold text-base text-slate-800">⛽ Rejestracja Tankowania / Paliwa</h3>
+                <h3 class="font-bold text-base text-slate-800">⛽ Rejestracja Tankowania</h3>
                 <div class="space-y-2 text-xs">
                     <div>
                         <label class="font-medium text-slate-500">Typ operacji</label>
@@ -182,7 +172,7 @@
                     </div>
                     <div>
                         <label class="font-medium text-slate-500">Tankowanie AdBlue (litry)</label>
-                        <input type="number" id="fuelAdblue" class="w-full p-2 border rounded mt-1" placeholder="np. 30" value="0">
+                        <input type="number" id="fuelAdblue" class="w-full p-2 border rounded mt-1" value="0">
                     </div>
                 </div>
                 <div class="flex gap-2 pt-2">
@@ -196,36 +186,21 @@
         <div id="statusListModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
             <div class="bg-white w-full max-w-md rounded-2xl p-5 space-y-3 max-h-[80vh] flex flex-col">
                 <h3 class="font-bold text-base text-slate-800">🚛 Status Wszystkich Pojazdów</h3>
-                <div id="fleetListContainer" class="flex-1 overflow-y-auto space-y-2 text-xs divide-y">
-                    <!-- Dynamicznie ładowane -->
-                </div>
+                <div id="fleetListContainer" class="flex-1 overflow-y-auto space-y-2 text-xs divide-y"></div>
                 <button onclick="closeModals()" class="w-full bg-slate-200 text-slate-700 py-2 rounded font-medium text-xs">Zamknij</button>
             </div>
         </div>
 
     </main>
 
-    <!-- Skrypt obsługi interfejsu -->
     <script>
-        let API_URL = localStorage.getItem("TRANS_API_URL") || "";
+        // TUTAJ WKLEJ SWÓJ URL Z GOOGLE APPS SCRIPT
+        const API_URL = "https://script.google.com/macros/s/TWOJ_URL_TUTAJ/exec";
         let currentUser = null;
 
         window.onload = function() {
-            if (API_URL) {
-                document.getElementById("scriptUrl").value = API_URL;
-                document.getElementById("configModal").classList.add("hidden");
-                fetchDrivers();
-            }
-        };
-
-        function saveUrl() {
-            const url = document.getElementById("scriptUrl").value.trim();
-            if (!url) return alert("Wpisz poprawny URL!");
-            localStorage.setItem("TRANS_API_URL", url);
-            API_URL = url;
-            document.getElementById("configModal").classList.add("hidden");
             fetchDrivers();
-        }
+        };
 
         async function apiCall(action, payload = {}) {
             try {
@@ -235,24 +210,25 @@
                 });
                 return await response.json();
             } catch (err) {
-                alert("Błąd połączenia z serwerem: " + err.message);
+                alert("Błąd połączenia: " + err.message);
                 return { status: "error" };
             }
         }
 
         async function fetchDrivers() {
-            const res = await apiCall("getDrivers");
-            if (res.status === "success") {
-                const select = document.getElementById("driverSelect");
-                select.innerHTML = '<option value="">-- Wybierz swoje imię i nazwisko --</option>';
-                res.drivers.forEach(d => {
-                    select.innerHTML += `<option value="${d.name}" data-vehicle="${d.vehicle}">${d.name} (${d.vehicle || 'Brak pojazdu'})</option>`;
-                });
+            try {
+                const res = await fetch(API_URL + "?action=getDrivers");
+                const data = await res.json();
+                if (data.status === "success") {
+                    const select = document.getElementById("driverSelect");
+                    select.innerHTML = '<option value="">-- Wybierz swoje imię i nazwisko --</option>';
+                    data.drivers.forEach(d => {
+                        select.innerHTML += `<option value="${d.name}" data-vehicle="${d.plate}">${d.name} (${d.plate || 'Brak pojazdu'})</option>`;
+                    });
+                }
+            } catch (e) {
+                console.error(e);
             }
-        }
-
-        function checkIfPinNeeded() {
-            // Można rozbudować o weryfikację wymagania PIN z bazy
         }
 
         async function login() {
@@ -261,12 +237,23 @@
             const pin = document.getElementById("pinInput").value;
             if (!name) return alert("Wybierz kierowcę!");
 
-            const res = await apiCall("login", { name, pin });
-            if (res.status === "success") {
-                currentUser = { name, vehicle: res.vehicle, status: res.driverStatus };
-                updateDashboard();
-            } else {
-                alert(res.message || "Błąd logowania (błędny PIN?)");
+            try {
+                const res = await fetch(API_URL + `?action=login&name=${encodeURIComponent(name)}&pin=${encodeURIComponent(pin)}`);
+                const data = await res.json();
+                
+                if (data.status === "success") {
+                    const selectedOpt = select.options[select.selectedIndex];
+                    currentUser = {
+                        name: name,
+                        vehicle: selectedOpt.getAttribute("data-vehicle"),
+                        status: data.driverStatus
+                    };
+                    updateDashboard();
+                } else {
+                    alert(data.message || "Błędny PIN!");
+                }
+            } catch (err) {
+                alert("Błąd logowania: " + err.message);
             }
         }
 
@@ -313,13 +300,14 @@
         function openStartModal() { document.getElementById("startModal").classList.remove("hidden"); }
         function openEndModal() { document.getElementById("endModal").classList.remove("hidden"); }
         function openFuelModal() { document.getElementById("fuelModal").classList.remove("hidden"); }
-        
+
         async function loadStatusView() {
-            const res = await apiCall("getFleetStatus");
-            if (res.status === "success") {
+            const res = await fetch(API_URL + "?action=getFleetStatus");
+            const data = await res.json();
+            if (data.status === "success") {
                 const container = document.getElementById("fleetListContainer");
                 container.innerHTML = "";
-                res.fleet.forEach(f => {
+                data.fleet.forEach(f => {
                     container.innerHTML += `
                         <div class="py-2 flex justify-between items-center">
                             <div>
@@ -362,7 +350,6 @@
         async function submitEndRoute() {
             const data = {
                 name: currentUser.name,
-                vehicle: currentUser.vehicle,
                 odometerEnd: document.getElementById("endOdometer").value,
                 rides: document.getElementById("endRides").value,
                 saldoPln: document.getElementById("endSaldoPln").value,
@@ -385,7 +372,6 @@
         async function submitFuel() {
             const data = {
                 name: currentUser.name,
-                vehicle: currentUser.vehicle,
                 fuelType: document.getElementById("fuelType").value,
                 litres: document.getElementById("fuelLitres").value,
                 odometer: document.getElementById("fuelOdometer").value,
