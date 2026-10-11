@@ -3,19 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elektroniczna Karta Drogowa</title>
+    <title>Elektroniczna Karta Drogowa v6</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col">
 
     <header class="bg-blue-600 text-white shadow-md p-4">
         <div class="max-w-md mx-auto flex justify-between items-center">
-            <h1 class="text-base font-bold">🚛 Karta Drogowa <span class="text-[10px] bg-blue-800 px-1.5 py-0.5 rounded">v5</span></h1>
+            <h1 class="text-base font-bold">🚛 Karta Drogowa <span class="text-[10px] bg-blue-800 px-1.5 py-0.5 rounded">v6</span></h1>
             <span id="userBadge" class="text-xs bg-blue-700 px-2.5 py-1 rounded-full hidden">Niezałogowany</span>
         </div>
     </header>
 
     <main class="max-w-md mx-auto w-full p-4 flex-1 flex flex-col">
+        <!-- KROK 1: Wybór użytkownika i PIN -->
         <div id="loginSection" class="bg-white rounded-xl shadow-sm p-5 space-y-4">
             <h2 class="text-base font-bold text-slate-700">Wybierz kierowcę</h2>
             <div>
@@ -31,6 +32,7 @@
             <button onclick="login()" class="w-full bg-blue-600 text-white py-2.5 rounded-lg text-sm font-semibold hover:bg-blue-700 transition">Zaloguj się</button>
         </div>
 
+        <!-- KROK 2: Panel Główny -->
         <div id="dashboardSection" class="hidden space-y-4">
             <div class="bg-white rounded-xl shadow-sm p-4 border-l-4" id="statusCardBorder">
                 <div class="flex justify-between items-center">
@@ -50,88 +52,18 @@
                 <button id="startRouteBtn" onclick="openStartModal()" class="bg-emerald-600 text-white p-4 rounded-xl shadow-sm font-semibold text-sm flex flex-col items-center justify-center gap-1 hover:bg-emerald-700 transition hidden">🟢 Rozpocznij Trasę</button>
                 <button id="endRouteBtn" onclick="openEndModal()" class="bg-rose-600 text-white p-4 rounded-xl shadow-sm font-semibold text-sm flex flex-col items-center justify-center gap-1 hover:bg-rose-700 transition hidden">🔴 Zakończ Trasę</button>
                 <button onclick="openFuelModal()" class="bg-amber-500 text-white p-4 rounded-xl shadow-sm font-semibold text-sm flex flex-col items-center justify-center gap-1 hover:bg-amber-600 transition col-span-2">⛽ Zgłoś Tankowanie</button>
-                <button onclick="loadStatusView()" class="bg-slate-700 text-white p-4 rounded-xl shadow-sm font-semibold text-sm flex flex-col items-center justify-center gap-1 hover:bg-slate-800 transition col-span-2">🚛 Status Pojazdów</button>
-            </div>
-        </div>
-
-        <!-- MODALE -->
-        <div id="startModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
-            <div class="bg-white w-full max-w-md rounded-2xl p-5 space-y-3 max-h-[90vh] overflow-y-auto">
-                <h3 class="font-bold text-base text-slate-800">🟢 Rozpocznij Nową Trasę</h3>
-                <div class="space-y-2 text-xs">
-                    <div><label class="font-medium text-slate-500">Typ trasy</label><select id="startType" class="w-full p-2 border rounded mt-1"><option value="Krajowy">Krajowy</option><option value="Międzynarodowy">Międzynarodowy</option></select></div>
-                    <div><label class="font-medium text-slate-500">Skąd</label><input type="text" id="startFrom" class="w-full p-2 border rounded mt-1" placeholder="np. Mława"></div>
-                    <div><label class="font-medium text-slate-500">Dokąd</label><input type="text" id="startTo" class="w-full p-2 border rounded mt-1" placeholder="np. Wrocław"></div>
-                    <div><label class="font-medium text-slate-500">Licznik początkowy (km)</label><input type="number" id="startOdometer" class="w-full p-2 border rounded mt-1" placeholder="np. 150000"></div>
-                    <div><label class="font-medium text-slate-500">Tonaż (t)</label><input type="number" step="0.1" id="startTonnage" class="w-full p-2 border rounded mt-1" placeholder="np. 20.5"></div>
-                </div>
-                <div class="flex gap-2 pt-2"><button onclick="closeModals()" class="flex-1 bg-slate-200 text-slate-700 py-2 rounded font-medium text-xs">Anuluj</button><button onclick="submitStartRoute()" class="flex-1 bg-emerald-600 text-white py-2 rounded font-medium text-xs">Zapisz i Start</button></div>
-            </div>
-        </div>
-
-        <div id="endModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
-            <div class="bg-white w-full max-w-md rounded-2xl p-5 space-y-3 max-h-[90vh] overflow-y-auto">
-                <h3 class="font-bold text-base text-slate-800">🔴 Zakończ Trasę</h3>
-                <div class="space-y-2 text-xs">
-                    <div><label class="font-medium text-slate-500">Licznik końcowy (km)</label><input type="number" id="endOdometer" class="w-full p-2 border rounded mt-1"></div>
-                    <div><label class="font-medium text-slate-500">Podjazdy</label><input type="text" id="endRides" class="w-full p-2 border rounded mt-1"></div>
-                    <div class="grid grid-cols-2 gap-2">
-                        <div><label class="font-medium text-slate-500">Saldo PLN</label><input type="number" step="0.01" id="endSaldoPln" class="w-full p-2 border rounded mt-1" value="0"></div>
-                        <div><label class="font-medium text-slate-500">Saldo EUR</label><input type="number" step="0.01" id="endSaldoEur" class="w-full p-2 border rounded mt-1" value="0"></div>
-                    </div>
-                    <div><label class="font-medium text-slate-500">Wykaz prac dodatkowych</label><input type="text" id="endExtraWorkDesc" class="w-full p-2 border rounded mt-1"></div>
-                    <div class="grid grid-cols-2 gap-2">
-                        <div><label class="font-medium text-slate-500">Zwrot kosztów (PLN)</label><input type="number" step="0.01" id="endRefunds" class="w-full p-2 border rounded mt-1" value="0"></div>
-                        <div><label class="font-medium text-slate-500">Godziny prac</label><input type="number" step="0.5" id="endExtraHours" class="w-full p-2 border rounded mt-1" value="0"></div>
-                    </div>
-                </div>
-                <div class="flex gap-2 pt-2"><button onclick="closeModals()" class="flex-1 bg-slate-200 text-slate-700 py-2 rounded font-medium text-xs">Anuluj</button><button onclick="submitEndRoute()" class="flex-1 bg-rose-600 text-white py-2 rounded font-medium text-xs">Zakończ Trasę</button></div>
-            </div>
-        </div>
-
-        <div id="fuelModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
-            <div class="bg-white w-full max-w-md rounded-2xl p-5 space-y-3">
-                <h3 class="font-bold text-base text-slate-800">⛽ Rejestracja Tankowania</h3>
-                <div class="space-y-2 text-xs">
-                    <div><label class="font-medium text-slate-500">Typ operacji</label><select id="fuelType" class="w-full p-2 border rounded mt-1"><option value="od hali">🟢 Tankowanie od hali</option><option value="od bramy">🟡 Tankowanie od bramy</option><option value="stacja paliw">🔵 Tankowanie stacja paliw</option></select></div>
-                    <div><label class="font-medium text-slate-500">Zatankowane paliwo (litry)</label><input type="number" id="fuelLitres" class="w-full p-2 border rounded mt-1" placeholder="np. 300"></div>
-                    <div><label class="font-medium text-slate-500">Przebieg przy tankowaniu (km)</label><input type="number" id="fuelOdometer" class="w-full p-2 border rounded mt-1" placeholder="np. 150450"></div>
-                    <div><label class="font-medium text-slate-500">Tankowanie AdBlue (litry)</label><input type="number" id="fuelAdblue" class="w-full p-2 border rounded mt-1" value="0"></div>
-                </div>
-                <div class="flex gap-2 pt-2"><button onclick="closeModals()" class="flex-1 bg-slate-200 text-slate-700 py-2 rounded font-medium text-xs">Anuluj</button><button onclick="submitFuel()" class="flex-1 bg-amber-500 text-white py-2 rounded font-medium text-xs">Zapisz Tankowanie</button></div>
-            </div>
-        </div>
-
-        <div id="statusListModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
-            <div class="bg-white w-full max-w-md rounded-2xl p-5 space-y-3 max-h-[80vh] flex flex-col">
-                <h3 class="font-bold text-base text-slate-800">🚛 Status Wszystkich Pojazdów</h3>
-                <div id="fleetListContainer" class="flex-1 overflow-y-auto space-y-2 text-xs divide-y"></div>
-                <button onclick="closeModals()" class="w-full bg-slate-200 text-slate-700 py-2 rounded font-medium text-xs">Zamknij</button>
             </div>
         </div>
     </main>
 
     <script>
-        // Automatyczne wykrywanie adresu API z wnętrza Google Apps Script
+        // Automatyczny adres API (bazuje na adresie wdrożenia Google)
         const API_URL = window.location.href.split('?')[0];
         let currentUser = null;
 
         window.onload = function() {
             fetchDrivers();
         };
-
-        async function apiCall(action, payload = {}) {
-            try {
-                const response = await fetch(API_URL, {
-                    method: "POST",
-                    body: JSON.stringify({ action, ...payload })
-                });
-                return await response.json();
-            } catch (err) {
-                alert("Błąd połączenia: " + err.message);
-                return { status: "error" };
-            }
-        }
 
         async function fetchDrivers() {
             try {
@@ -215,95 +147,6 @@
                 cardBorder.className = "bg-white rounded-xl shadow-sm p-4 border-l-4 border-emerald-500";
                 startBtn.classList.remove("hidden");
                 endBtn.classList.add("hidden");
-            }
-        }
-
-        function openStartModal() { document.getElementById("startModal").classList.remove("hidden"); }
-        function openEndModal() { document.getElementById("endModal").classList.remove("hidden"); }
-        function openFuelModal() { document.getElementById("fuelModal").classList.remove("hidden"); }
-
-        async function loadStatusView() {
-            const res = await fetch(API_URL + "?action=getFleetStatus");
-            const data = await res.json();
-            if (data.status === "success") {
-                const container = document.getElementById("fleetListContainer");
-                container.innerHTML = "";
-                data.fleet.forEach(f => {
-                    container.innerHTML += `
-                        <div class="py-2 flex justify-between items-center">
-                            <div>
-                                <p class="font-bold text-slate-700">${f.name}</p>
-                                <p class="text-slate-400">Pojazd: ${f.vehicle}</p>
-                            </div>
-                            <span class="px-2 py-1 rounded text-[10px] font-semibold ${f.status === 'W trasie' ? 'bg-rose-100 text-rose-700' : 'bg-emerald-100 text-emerald-700'}">${f.status}</span>
-                        </div>
-                    `;
-                });
-                document.getElementById("statusListModal").classList.remove("hidden");
-            }
-        }
-
-        function closeModals() {
-            document.querySelectorAll("[id$='Modal']").forEach(m => m.classList.add("hidden"));
-        }
-
-        async function submitStartRoute() {
-            const data = {
-                name: currentUser.name,
-                vehicle: currentUser.vehicle,
-                type: document.getElementById("startType").value,
-                from: document.getElementById("startFrom").value,
-                to: document.getElementById("startTo").value,
-                odometer: document.getElementById("startOdometer").value,
-                tonnage: document.getElementById("startTonnage").value
-            };
-            const res = await apiCall("startRoute", data);
-            if (res.status === "success") {
-                alert("Trasa rozpoczęta pomyślnie!");
-                closeModals();
-                currentUser.status = "W trasie";
-                updateDashboard();
-            } else {
-                alert("Błąd: " + res.message);
-            }
-        }
-
-        async function submitEndRoute() {
-            const data = {
-                name: currentUser.name,
-                odometerEnd: document.getElementById("endOdometer").value,
-                rides: document.getElementById("endRides").value,
-                saldoPln: document.getElementById("endSaldoPln").value,
-                saldoEur: document.getElementById("endSaldoEur").value,
-                extraWorkDesc: document.getElementById("endExtraWorkDesc").value,
-                refunds: document.getElementById("endRefunds").value,
-                extraHours: document.getElementById("endExtraHours").value
-            };
-            const res = await apiCall("endRoute", data);
-            if (res.status === "success") {
-                alert("Trasa została zakończona i zapisana w rejestrze!");
-                closeModals();
-                currentUser.status = "Wolny";
-                updateDashboard();
-            } else {
-                alert("Błąd: " + res.message);
-            }
-        }
-
-        async function submitFuel() {
-            const data = {
-                name: currentUser.name,
-                fuelType: document.getElementById("fuelType").value,
-                litres: document.getElementById("fuelLitres").value,
-                odometer: document.getElementById("fuelOdometer").value,
-                adblue: document.getElementById("fuelAdblue").value
-            };
-            const res = await apiCall("addFuel", data);
-            if (res.status === "success") {
-                alert("Tankowanie zostało zarejestrowane!");
-                closeModals();
-            } else {
-                alert("Błąd: " + res.message);
             }
         }
     </script>
