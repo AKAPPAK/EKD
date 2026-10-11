@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elektroniczna Karta Drogowa v3</title>
+    <title>Elektroniczna Karta Drogowa v4</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col">
 
     <header class="bg-blue-600 text-white shadow-md p-4">
         <div class="max-w-md mx-auto flex justify-between items-center">
-            <h1 class="text-base font-bold">🚛 Karta Drogowa <span class="text-[10px] bg-blue-800 px-1.5 py-0.5 rounded">v3</span></h1>
+            <h1 class="text-base font-bold">🚛 Karta Drogowa <span class="text-[10px] bg-blue-800 px-1.5 py-0.5 rounded">v4</span></h1>
             <span id="userBadge" class="text-xs bg-blue-700 px-2.5 py-1 rounded-full hidden">Niezałogowany</span>
         </div>
     </header>
@@ -188,8 +188,8 @@
     </main>
 
     <script>
-        // Prawidłowy adres API wklejony bezpośrednio
-        const API_URL = "https://script.google.com/macros/s/AKfycbz1kpteVHTLGkaZrsV9APe285v9SPoKFUf7MqnQdOMl8WilYsOQqsDNB7-2/exec";
+        // Prawidłowy adres API wklejony automatycznie
+        const API_URL = "https://script.google.com/macros/s/AKfycbwtoij7oIRSMH_WzsRpC-7DMQdsijFmXZiWHMMN_LnsVRlKD-_Tixh83BvU7oXvFrPo/exec";
         let currentUser = null;
 
         window.onload = function() {
@@ -247,7 +247,7 @@
                     };
                     updateDashboard();
                 } else {
-                    alert(data.message || "Błędny PIN!");
+                    alert(data.message || "Błędne hasło / PIN!");
                 }
             } catch (err) {
                 alert("Błąd logowania: " + err.message);
