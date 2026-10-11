@@ -3,15 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elektroniczna Karta Drogowa</title>
+    <title>Elektroniczna Karta Drogowa v2</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col">
 
-    <!-- Nagłówek -->
     <header class="bg-blue-600 text-white shadow-md p-4">
         <div class="max-w-md mx-auto flex justify-between items-center">
-            <h1 class="text-base font-bold">🚛 Karta Drogowa</h1>
+            <h1 class="text-base font-bold">🚛 Karta Drogowa <span class="text-[10px] bg-blue-800 px-1.5 py-0.5 rounded">v2</span></h1>
             <span id="userBadge" class="text-xs bg-blue-700 px-2.5 py-1 rounded-full hidden">Niezałogowany</span>
         </div>
     </header>
@@ -28,15 +27,14 @@
                 </select>
             </div>
             <div>
-                <label class="block text-xs font-medium text-slate-500 mb-1">Kod PIN</label>
-                <input type="password" id="pinInput" placeholder="Wpisz swój PIN" class="w-full p-2.5 border rounded-lg text-sm">
+                <label class="block text-xs font-medium text-slate-500 mb-1">Kod PIN / Hasło</label>
+                <input type="password" id="pinInput" placeholder="Wpisz swoje hasło" class="w-full p-2.5 border rounded-lg text-sm">
             </div>
             <button onclick="login()" class="w-full bg-blue-600 text-white py-2.5 rounded-lg text-sm font-semibold hover:bg-blue-700 transition">Zaloguj się</button>
         </div>
 
-        <!-- KROK 2: Panel Główny Kierowcy -->
+        <!-- KROK 2: Panel Główny -->
         <div id="dashboardSection" class="hidden space-y-4">
-            <!-- Status Card -->
             <div class="bg-white rounded-xl shadow-sm p-4 border-l-4" id="statusCardBorder">
                 <div class="flex justify-between items-center">
                     <div>
@@ -51,7 +49,6 @@
                 </div>
             </div>
 
-            <!-- Przyciski akcji głównej -->
             <div class="grid grid-cols-2 gap-3">
                 <button id="startRouteBtn" onclick="openStartModal()" class="bg-emerald-600 text-white p-4 rounded-xl shadow-sm font-semibold text-sm flex flex-col items-center justify-center gap-1 hover:bg-emerald-700 transition hidden">
                     🟢 Rozpocznij Trasę
@@ -68,7 +65,7 @@
             </div>
         </div>
 
-        <!-- MODAL: Rozpoczęcie trasy -->
+        <!-- MODALE (Start, Koniec, Tankowanie, Statusy) -->
         <div id="startModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
             <div class="bg-white w-full max-w-md rounded-2xl p-5 space-y-3 max-h-[90vh] overflow-y-auto">
                 <h3 class="font-bold text-base text-slate-800">🟢 Rozpocznij Nową Trasę</h3>
@@ -104,7 +101,6 @@
             </div>
         </div>
 
-        <!-- MODAL: Zakończenie trasy -->
         <div id="endModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
             <div class="bg-white w-full max-w-md rounded-2xl p-5 space-y-3 max-h-[90vh] overflow-y-auto">
                 <h3 class="font-bold text-base text-slate-800">🔴 Zakończ Trasę</h3>
@@ -149,7 +145,6 @@
             </div>
         </div>
 
-        <!-- MODAL: Tankowanie -->
         <div id="fuelModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
             <div class="bg-white w-full max-w-md rounded-2xl p-5 space-y-3">
                 <h3 class="font-bold text-base text-slate-800">⛽ Rejestracja Tankowania</h3>
@@ -182,7 +177,6 @@
             </div>
         </div>
 
-        <!-- MODAL: Status Pojazdów -->
         <div id="statusListModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
             <div class="bg-white w-full max-w-md rounded-2xl p-5 space-y-3 max-h-[80vh] flex flex-col">
                 <h3 class="font-bold text-base text-slate-800">🚛 Status Wszystkich Pojazdów</h3>
@@ -194,8 +188,7 @@
     </main>
 
     <script>
-        // TUTAJ WKLEJ SWÓJ URL Z GOOGLE APPS SCRIPT
-        const API_URL = "https://script.google.com/macros/s/TWOJ_URL_TUTAJ/exec";
+        const API_URL = "https://script.google.com/macros/s/TWOJ_URL_TUTAJ/exec"; // Wklej swój URL wdrożenia
         let currentUser = null;
 
         window.onload = function() {
@@ -225,9 +218,12 @@
                     data.drivers.forEach(d => {
                         select.innerHTML += `<option value="${d.name}" data-vehicle="${d.plate}">${d.name} (${d.plate || 'Brak pojazdu'})</option>`;
                     });
+                } else {
+                    alert("Błąd serwera: " + data.message);
                 }
             } catch (e) {
                 console.error(e);
+                alert("Nie udało się pobrać listy kierowców. Sprawdź adres API.");
             }
         }
 
